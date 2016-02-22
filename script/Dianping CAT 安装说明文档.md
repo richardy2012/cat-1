@@ -271,10 +271,10 @@
   5. 登入 cat-home 系统，修改路由配置
 
      打开浏览器，输入[http://10.8.40.26:8080/cat/](http://10.8.40.26:8080/cat/)
+
+     ![cat-route.jpg](/img/config-router.jpg)
     
-	    ![cat-route.jpg](/img/config-router.jpg)
-    
-	    选择配置 > 全局警告配置 > 客户端路由，或者在浏览器地址栏中直接输入 http:/10.8.40.26:8080/cat/s/config?op=routerConfigUpdate，打开客户端路由配置界面。
+	    选择配置 > 全局警告配置 > 客户端路由，或者在浏览器地址栏中直接输入 `http:/10.8.40.26:8080/cat/s/config?op=routerConfigUpdate`，打开客户端路由配置界面。
 
      * 把 backup-server 设置为当前服务器对外 IP 地址，端口固定为 2280;
      * default-server 定义可跳转的路由地址，可以设置多个。default-server 的 id 属性配置可路由的 cat-home 服务 IP 地址，端口固定为 2280。若需要禁用路由地址，可把 enable 设置为 false。
