@@ -88,7 +88,7 @@
 
    * 编译构造好的 war 安装到 Maven 仓库中。
 
-### 2、自动创建库表、配置文件
+### 2、自动创建数据库表、配置文件
 
 * 前提条件
 
@@ -99,185 +99,194 @@
 
  1. 运行 CAT 安装插件命令
 
-    maven cat:install
+    ```
+    $ maven cat:install
+    ```
 
  2. 按提示输入数据库配置参数
 
-    ![数据库配置](http://upload-images.jianshu.io/upload_images/424045-7e5de138226fe347.jpg)
+    ![数据库配置](/img/config-database.jpg)
     
-	（_红线标识输入的配置信息_）
+	红线表示输入的配置信息
 
  3. 执行完成后，
 
- * 数据库中创建cat表空间，并创建所有表结构;
+    * 数据库中创建 cat 表空间，并创建所有表结构;
 
- * 在/data/appdatas/cat/目录中，生成三个配置文件：client.xml、server.xml、datasources.xml（windows系统中，/data目录与源码目录在一个系统盘）
+    * 在 /data/appdatas/cat/ 目录中，生成三个配置文件：client.xml、server.xml、datasources.xml（Windows 系统中，/data 目录与源码目录在一个系统盘）
 
  4. 补充说明
 	
-	此部分操作，可手工完成，安装MySQL好数据库后,
+	此部分操作，可手工完成，安装 MySQL 数据库后：
 	
-	* 登录MySQL,创建cat表空间
+	* 登录 MySQL，创建 cat 数据库：
 	  
-	  create database cat
+      ```
+	  $ create database cat
+      ```
 
-	* 执行监控系统源码/source/cat/script/Cat.sql脚本完成表结构的创建
-	 
-	 source /source/cat/script/Cat.sql
+	* 执行 cat 源码中 /script/Cat.sql 脚本完成表结构的创建
+	  
+      ```
+	  $ source ./script/Cat.sql
+      ```
 	
-	* 拷贝监控系统源码/source/cat/script/目录下的client.xml、server.xml、datasources.xml到/data/appdatas/cat/目录中
+	* 拷贝监控系统源码 /source/cat/script/ 目录下的 client.xml、server.xml、datasources.xml 到 /data/appdatas/cat/ 目录中
 
-	 cp /source/cat/script/*.xml /data/appdatas/cat/
+	  $ cp /source/cat/script/*.xml /data/appdatas/cat/
 
-### 3、修改监控系统CAT服务配置
+### 3、修改 cat 服务配置
 
 安装创建的配置信息都是默认值，需要按实际情况修改，整个系统才可正常运行。
 
-几项假设 
+几项假设：
 
- * cat.war 包部署在10.8.40.26、10.8.40.27、10.8.40.28三台机器上,10.8.40.26为三台机器中的主服务器，TCP端口只能局域网内访问；
- * web应用服务器采用 Tomcat 7；
- * 数据库采用 MySQL 5.1 ,安装在10.8.40.147上；
- * 暂不启用HDFS存储服务；
- * 暂不启用LDAP服务；
+ * cat.war 包部署在 10.8.40.26、10.8.40.27、10.8.40.28 三台机器上，10.8.40.26 为三台机器中的主服务器，TCP 端口只能局域网内访问；
+ * web 应用服务器采用 Tomcat 7；
+ * 数据库采用 MySQL 5.1，安装在 10.8.40.147 上；
+ * 暂不启用 HDFS 存储服务；
+ * 暂不启用 LDAP 服务；
 
 * 前提条件
 
- 1. CAT 安装包已构建
- 2. 数据库和表结构已创建
- 3. /data/appdatas/cat/ 目录下的配置文件已生成
+  1. CAT 安装包已构建
+  2. 数据库和表结构已创建
+  3. /data/appdatas/cat/ 目录下的配置文件已生成
 
 * 操作步骤
  
- 1. 修改客户端配置文件
+  1. 修改客户端配置文件
 
-　　打开/data/appdatas/cat/client.xml客户端配置文件，
+　 　 打开 /data/appdatas/cat/client.xml 客户端配置文件：
+     
+     ```
+     <config mode="client" xmlns:xsi="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="config.xsd">
+         <servers>
+             <server ip="10.8.40.26" port="2280" http-port="8080" />
+             <server ip="10.8.40.27" port="2280" http-port="8080" />
+             <server ip="10.8.40.28" port="2280" http-port="8080" />
+         </servers>
+     </config>
+     ```
 
-	<config mode="client"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema"
-	xsi:noNamespaceSchemaLocation="config.xsd">
-		<servers>
-			<server ip="10.8.40.26" port="2280" http-port="8080" />
-			<server ip="10.8.40.27" port="2280" http-port="8080" />
-			<server ip="10.8.40.28" port="2280" http-port="8080" />
-		</servers>
-	</config>
+     配置说明：
 
- 配置说明：
+     * mode：定义配置模式，固定值为 client;--暂未使用
+     * servers：定义多个服务端信息;
+     * server：定义某个服务端信息;
+     * ip：配置服务端（cat-home）对外 IP 地址
+     * port：配置服务端（cat-home）对外 TCP 协议开启端口，固定值为 2280;
+     * http-port：配置服务端（cat-home）对外 HTTP 协议开启端口, 如：Tomcat 默认是 8080 端口，若未指定，默认为 8080 端口
 
-  * mode : 定义配置模式，固定值为client;--暂未使用
-  * servers : 定义多个服务端信息;
-  * server : 定义某个服务端信息;
-  * ip : 配置服务端（cat-home）对外IP地址
-  * port : 配置服务端（cat-home）对外TCP协议开启端口，固定值为2280;
-  * http-port : 配置服务端（cat-home）对外HTTP协议开启端口, 如：tomcat默认是8080端口，若未指定，默认为8080端口;
+  2. 修改数据库配置
 
- 2. 修改数据库配置
+     打开 /data/appdatas/cat/datasources.xml 数据库配置文件，
+     
+     ```
+     <data-sources>
+       		<data-source id="cat">
+          			<maximum-pool-size>3</maximum-pool-size>
+          			<connection-timeout>1s</connection-timeout>
+          			<idle-timeout>10m</idle-timeout>
+          			<statement-cache-size>1000</statement-cache-size>
+          			<properties>
+             				<driver>com.mysql.jdbc.Driver</driver>
+             				<url><![CDATA[jdbc:mysql://10.8.40.147:3306/cat]]></url>
+             				<user>root</user>
+             				<password>mysql</password>
+             				<connectionProperties>
+                					<![CDATA[useUnicode=true&autoReconnect=true]]>
+             				</connectionProperties>
+          			</properties>
+         </data-source>
+       		<data-source id="app">
+          			<maximum-pool-size>3</maximum-pool-size>
+          			<connection-timeout>1s</connection-timeout>
+          			<idle-timeout>10m</idle-timeout>
+          			<statement-cache-size>1000</statement-cache-size>
+          			<properties>
+             				<driver>com.mysql.jdbc.Driver</driver>
+             				<url><![CDATA[jdbc:mysql://10.8.40.147:3306/cat]]></url>
+             				<user>root</user>
+             				<password>mysql</password>
+             				<connectionProperties>
+                					<![CDATA[useUnicode=true&autoReconnect=true]]>
+             				</connectionProperties>
+          			</properties>
+       		</data-source>
+    	</data-sources>
+     ```
 
-　　打开/data/appdatas/cat/datasources.xml数据库配置文件，
+     配置说明：
 
-	<data-sources>
-		<data-source id="cat">
-			<maximum-pool-size>3</maximum-pool-size>
-			<connection-timeout>1s</connection-timeout>
-			<idle-timeout>10m</idle-timeout>
-			<statement-cache-size>1000</statement-cache-size>
-			<properties>
-				<driver>com.mysql.jdbc.Driver</driver>
-				<url><![CDATA[jdbc:mysql://10.8.40.147:3306/cat]]></url>
-				<user>root</user>
-				<password>mysql</password>
-				<connectionProperties>
-					<![CDATA[useUnicode=true&autoReconnect=true]]>
-				</connectionProperties>
-			</properties>
-		</data-source> 
-		<data-source id="app">
-			<maximum-pool-size>3</maximum-pool-size>
-			<connection-timeout>1s</connection-timeout>
-			<idle-timeout>10m</idle-timeout>
-			<statement-cache-size>1000</statement-cache-size>
-			<properties>
-				<driver>com.mysql.jdbc.Driver</driver>
-				<url><![CDATA[jdbc:mysql://10.8.40.147:3306/cat]]></url>
-				<user>root</user>
-				<password>mysql</password>
-				<connectionProperties>
-					<![CDATA[useUnicode=true&autoReconnect=true]]>
-				</connectionProperties>
-			</properties>
-		</data-source>
-	</data-sources>
+     * 生成配置文件时，输入的数据库连接信息已写入此文件，如不换数据库，不用做任何修改
+     * 主要修改项为：url（数据库连接地址）、user（数据库用户名）、password（数据用户登录密码）
 
- 配置说明：
+  3. 修改服务端服务配置
 
-  * 生成配置文件时，输入的数据库连接信息已写入此文件，如不换数据库，不用做任何修改
-  * 主要修改项为：url（数据库连接地址）、user（数据库用户名）、password（数据用户登录密码）
+     打开/data/appdatas/cat/server.xml服务端服务配置文件，
 
- 3. 修改服务端服务配置
+     ```
+     <config local-mode="false" hdfs-machine="false" job-machine="true" alert-machine="true">
+       		<storage local-base-dir="/data/appdatas/cat/bucket/" max-hdfs-storage-time="15" local-report-storage-time="7" local-logivew-storage-time="7">
+          			<hdfs id="logview" max-size="128M" server-uri="hdfs://10.8.40.31/user/cat" base-dir="logview"/>
+          			<hdfs id="dump" max-size="128M" server-uri="hdfs://10.8.40.32/user/cat" base-dir="dump"/>
+          			<hdfs id="remote" max-size="128M" server-uri="hdfs://10.8.40.33/user/cat" base-dir="remote"/>
+       		</storage>
+       		<console default-domain="Cat" show-cat-domain="true">
+          			<remote-servers>10.8.40.26:8080,10.8.40.27:8080,10.8.40.28:8080</remote-servers>
+       		</console>
+       		<ldap ldapUrl="ldap://10.8.40.21:389/DC=dianpingoa,DC=com"/>
+    	</config>
+     ```
 
-　　打开/data/appdatas/cat/server.xml服务端服务配置文件，
+     配置说明：
 
-	<config local-mode="false" hdfs-machine="false" job-machine="true" alert-machine="true">
-		<storage local-base-dir="/data/appdatas/cat/bucket/" max-hdfs-storage-time="15" local-report-storage-time="7" local-logivew-storage-time="7">
-			<hdfs id="logview" max-size="128M" server-uri="hdfs://10.8.40.31/user/cat" base-dir="logview"/>
-			<hdfs id="dump" max-size="128M" server-uri="hdfs://10.8.40.32/user/cat" base-dir="dump"/>
-			<hdfs id="remote" max-size="128M" server-uri="hdfs://10.8.40.33/user/cat" base-dir="remote"/>
-		</storage>
-		<console default-domain="Cat" show-cat-domain="true">
-			<remote-servers>10.8.40.26:8080,10.8.40.27:8080,10.8.40.28:8080</remote-servers>
-		</console>
-		<ldap ldapUrl="ldap://10.8.40.21:389/DC=dianpingoa,DC=com"/>
-	</config>
+     * local-mode : 定义服务是否为本地模式（开发模式），在生成环境时，设置为true,启动远程监听模式。默认为 false;
+     * hdfs-machine : 定义是否启用HDFS存储方式，默认为 false；
+     * job-machine : 定义当前服务是否为报告工作机（开启生成汇总报告和统计报告的任务，只需要一台服务机开启此功能），默认为 false；
+     * alert-machine : 定义当前服务是否为报警机（开启各类报警监听，只需要一台服务机开启此功能），默认为 false；
+     * storage : 定义数据存储配置信息
+     * local-report-storage-time : 定义本地报告存放时长，单位为（天）
+     * local-logivew-storage-time : 定义本地日志存放时长，单位为（天）
+     * local-base-dir : 定义本地数据存储目录
+     * hdfs : 定义HDFS配置信息，便于直接登录系统
+     * server-uri : 定义HDFS服务地址
+     * console : 定义服务控制台信息
+     * remote-servers : 定义HTTP服务列表，（远程监听端同步更新服务端信息即取此值）
+     * ldap : 定义LDAP配置信息
+     * ldapUrl : 定义LDAP服务地址
 
- 配置说明：
+  4. 发布启动 cat-home 服务
 
-  * local-mode : 定义服务是否为本地模式（开发模式），在生成环境时，设置为true,启动远程监听模式。默认为 false;
-  * hdfs-machine : 定义是否启用HDFS存储方式，默认为 false；
-  * job-machine : 定义当前服务是否为报告工作机（开启生成汇总报告和统计报告的任务，只需要一台服务机开启此功能），默认为 false；
-  * alert-machine : 定义当前服务是否为报警机（开启各类报警监听，只需要一台服务机开启此功能），默认为 false；
-  * storage : 定义数据存储配置信息
-  * local-report-storage-time : 定义本地报告存放时长，单位为（天）
-  * local-logivew-storage-time : 定义本地日志存放时长，单位为（天）
-  * local-base-dir : 定义本地数据存储目录
-  * hdfs : 定义HDFS配置信息，便于直接登录系统
-  * server-uri : 定义HDFS服务地址
-  * console : 定义服务控制台信息
-  * remote-servers : 定义HTTP服务列表，（远程监听端同步更新服务端信息即取此值）
-  * ldap : 定义LDAP配置信息
-  * ldapUrl : 定义LDAP服务地址
+     1. 拷贝监控系统源码/source/cat/cat-home/target/目录下的cat-alpha-1.3.3.war到web应用服务器的发布目录（如：$TOMCAT_HOME$/webapps/）,并修改war包名称为cat.war
 
+        `cp /source/cat/cat-home/cat-alpha-1.3.3.war /usr/local/tomcat7/webapps/cat.war`
 
- 4. 发布启动 cat-home 服务
+     2. 启动应用服务器
 
-  1. 拷贝监控系统源码/source/cat/cat-home/target/目录下的cat-alpha-1.3.3.war到web应用服务器的发布目录（如：$TOMCAT_HOME$/webapps/）,并修改war包名称为cat.war
+        cd /usr/local/tomcat7/bin/
+        ./startup.sh
 
-    `cp /source/cat/cat-home/cat-alpha-1.3.3.war /usr/local/tomcat7/webapps/cat.war`
+  5. 登入 cat-home 系统，修改路由配置
 
-  2. 启动应用服务器
-
-    cd /usr/local/tomcat7/bin/
-    ./startup.sh
-
- 5. 登入 cat-home 系统，修改路由配置
-
-    打开浏览器，输入[http://10.8.40.26:8080/cat/](http://10.8.40.26:8080/cat/)
+     打开浏览器，输入[http://10.8.40.26:8080/cat/](http://10.8.40.26:8080/cat/)
     
-	![cat-route.jpg](http://upload-images.jianshu.io/upload_images/424045-e07ca5912a562d16.jpg)
+	    ![cat-route.jpg](/img/config-router.jpg)
     
-	选择 配置-->全局警告配置-->客户端路由,或者在浏览器地址栏中直接输入http:/10.8.40.26:8080/cat/s/config?op=routerConfigUpdate，打开客户端路由配置界面。
+	    选择配置 > 全局警告配置 > 客户端路由，或者在浏览器地址栏中直接输入 http:/10.8.40.26:8080/cat/s/config?op=routerConfigUpdate，打开客户端路由配置界面。
 
-     * 把backup-server设置为当前服务器对外IP地址，端口固定为2280;
-     * default-server定义可跳转的路由地址，可以设置多个。default-server的id属性配置可路由的cat-home服务IP地址，端口固定为2280;若需要禁用路由地址，可把enable设置为false。
-	 * 点击“提交”按钮，保存修改的路由配置
+     * 把 backup-server 设置为当前服务器对外 IP 地址，端口固定为 2280;
+     * default-server 定义可跳转的路由地址，可以设置多个。default-server 的 id 属性配置可路由的 cat-home 服务 IP 地址，端口固定为 2280。若需要禁用路由地址，可把 enable 设置为 false。
+     * 点击“提交”按钮，保存修改的路由配置
 
- 6. 复制配置到27、28两机器
+  6. 复制配置到 27、28 两机器
 
-　* 拷贝 10.8.40.26机器/data/appdatas/cat/目录中client.xml、server.xml、datasources.xml三个配置文件到27、28两机器相同目录中
-  * 修改server.xml配置中的 job-machine 和 alert-machine属性，都设置为false,禁用生成报告和报警功能，只开启监听功能
-  * 启动27、28上的Tomcat,开启cat服务，完成服务端的配置及启动
+     * 拷贝 10.8.40.26机器/data/appdatas/cat/目录中client.xml、server.xml、datasources.xml三个配置文件到27、28两机器相同目录中
+     * 修改server.xml配置中的 job-machine 和 alert-machine属性，都设置为false,禁用生成报告和报警功能，只开启监听功能
+     * 启动27、28上的Tomcat,开启cat服务，完成服务端的配置及启动
 
-  （*若服务端只分配一台服务器，按10.8.40.26完成安装配置即可*）
+     （若服务端只分配一台服务器，按10.8.40.26完成安装配置即可）
 
 
 ### 4、监控端安装配置
