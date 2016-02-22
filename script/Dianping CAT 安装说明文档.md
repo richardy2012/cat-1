@@ -323,6 +323,7 @@
        <domain id="cat"/>
        <!--domain id="cat-agent"/-->
    </config>
+   ```
 
    * 特殊域配置，优先读取 `app.properties` 文件，若不存在，才读取 `META-INF/cat/client.xml` 配置文件
    * 特征域名称不能为：PhoenixAgent、cat-agent、AndroidCrashLog、iOSCrashLog、ALL、FrontEnd、MerchantAndroidCrashLog、MerchantIOSCrashLog、paas、SMS-RECEIVER,否则监听的数据不能正确上传到CAT服务
@@ -332,7 +333,7 @@
 
 3. 启动 Tomcat，开启 agent 监听
 
-　启动 agent 系统后，刷新 http://10.8.40.26:8080/cat/r, 可以看到监听的数据信息。
+   启动 agent 系统后，刷新 http://10.8.40.26:8080/cat/r, 可以看到监听的数据信息。
 
 ## 附注
 
