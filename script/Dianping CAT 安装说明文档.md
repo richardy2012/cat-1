@@ -12,12 +12,12 @@
 
 * 内存 4G 以上
 * 硬盘 100G 以上
-* 操作系统 Windows或Linux操作系统（建议选用Linux操作系统）
+* 操作系统 Windows 或 Linux 操作系统（建议选用 Linux 操作系统）
 
 ### 2. 运行环境
 
 * Java 6 以上
-* Web 应用服务器，如：Apache Tomcat、JBoss Application Server、WebSphere Application Server、WebLogic Application Server（可选项，内置Netty应用服务器）
+* Web 应用服务器，如：Apache Tomcat、JBoss Application Server、WebSphere Application Server、WebLogic Application Server（可选项，内置 Netty 应用服务器）
 * MySQL 数据库
 * Maven 3 以上（只编译和安装时需要）
 
@@ -60,29 +60,29 @@
 
 ## 三、安装操作
 
-### 1、 编译源码，构建war包
+### 1、编译源码，构建 war 包
 
 * 前提条件
 
- 1. 已安装、配置JDK;
- 2. 已安装、配置MAVEN;
- 3. 已下载CAT源码;
+ 1. 已安装、配置 JDK;
+ 2. 已安装、配置 Maven;
+ 3. 已下载 CAT 源码;
 
 * 操作步骤
 
- 1. 进入监控系统源码的cat目录
+ 1. 进入监控系统源码的 cat 目录
 
-    cd /source/cat
+        $ cd /source/cat
 
  2. 显示确认目录结构
 
-    dir
+        $ dir
 
-    ![目录结构](http://upload-images.jianshu.io/upload_images/424045-e9fad099e5c4c8f5.jpg)
+    ![目录结构](/img/source-code-tree.jpg)
 
- 3. 运行 MAVEN 打包安装命令
+ 3. 运行 Maven 打包安装命令，并不进行单元测试：
 
-    mvn clean install -DskipTests
+        $ mvn clean install -DskipTests
 
  4. 执行完成后，
 
