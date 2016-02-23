@@ -31,6 +31,7 @@ import com.dianping.cat.message.spi.MessageTree;
  * This is the main entry point to the system.
  */
 public class Cat {
+	
 	private static Cat s_instance = new Cat();
 
 	private static volatile boolean s_init = false;
@@ -103,7 +104,6 @@ public class Cat {
 	// this should be called during application initialization time
 	public static void initialize(File configFile) {
 		PlexusContainer container = ContainerLoader.getDefaultContainer();
-
 		initialize(container, configFile);
 	}
 

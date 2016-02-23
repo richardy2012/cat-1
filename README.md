@@ -36,21 +36,34 @@ Requirements
 
 Quick Started
 ---------------------
-#####1、在CAT目录下，用maven构建项目
-        mvn clean install -DskipTests
-#####2、配置CAT的环境
-		mvn cat:install
+
+##### 1. 在 CAT 目录下，用 Maven 构建项目
+
+         ```
+         $ mvn clean install -DskipTests
+         ```
+
+##### 2. 配置CAT的环境
+         
+         ```
+		 mvn cat:install
+         ```
+
 Note：
 * Linux\Mac  需要对/data/appdatas/cat和/data/applogs/cat有读写权限
 * Windows    则是对系统运行盘下的/data/appdatas/cat和/data/applogs/cat有读写权限
 
 #####3、(Optional)如果安装了hadoop集群，需到/data/appdatas/cat/server.xml中配置对应hadoop信息。将localmode设置为false，默认情况下，CAT在开发模式（localmode=true）下工作。
 
-#####4、运行CAT
-		cd cat-home;mvn jetty:run
-然后打开浏览器，输入http://localhost:2281/cat/。
+##### 4. 运行 CAT
+         
+         ```
+		   cd cat-home;mvn jetty:run
+         ```
 
-或者在cat目录下输入
+然后打开浏览器，输入 [http://localhost:2281/cat/](http://localhost:2281/cat/)。
+
+或者在 cat 目录下输入
 		mvn eclipse:clean eclipse:eclipse
 然后将项目导入到eclipse中，运行cat-home项目里得‘com.dianping.cat.TestServer’来启动CAT。
 
@@ -63,3 +76,5 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 <http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+cat 使用了 [Plexus](http://codehaus-plexus.github.io) 作为容器 cat-client 对象的容器。

@@ -22,7 +22,6 @@ import com.google.gson.JsonSerializer;
 public class JsonBuilder {
 
 	private FieldNamingStrategy m_fieldNamingStrategy = new FieldNamingStrategy() {
-
 		@Override
 		public String translateName(Field f) {
 			String name = f.getName();

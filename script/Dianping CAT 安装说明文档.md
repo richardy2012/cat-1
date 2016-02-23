@@ -299,11 +299,13 @@
 
 1. 从 10.8.40.26 机器下载 `agent.war` 包和 `client.xml` 配置文件到安装机器对应目录：
 
+   ```
    $ scp -r root@10.8.40.26:/source/cat/cat-agent/target/cat-agent-1.3.3.war /usr/local/tomcat7/webapps/agent.war
   
    $ mkdir -p /data/appdatas/cat
 
    $ scp -r root@10.8.40.26:/source/cat/script/client.xml /data/appdatas/cat/
+   ```
 
 2. 添加监听端特征域配置文件：
 

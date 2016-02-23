@@ -7,14 +7,13 @@ __CAT__监控系统由多个组件组成
 
 ![cat 组件关系图](img/cat-cmp.jpg)
 
-* cat-home.war : 服务端组件，负责收集监控信息，分析处理生成报告、作出警告
-* cat-agent.war : 监控端组件，负责收集被监控端信息，并上传监控信息到服务端
-* cat-client.jar : 客户端组件，负责与服务端进行连接通信，
-* cat-core.jar : 核心处理组件，负责具体的与客户端通信服务，解析数据、输出报告
-* cat-consumer.jar : 消费处理组件，负责实际的监控数据分析，处理工作
-* cat-hadoop.jar : HDFS 存储组件
-* broker-service.war : 监控服务代理组件
-
+* cat-home.war：服务端组件，负责收集监控信息，分析处理生成报告、作出警告
+* cat-agent.war：监控端组件，负责收集被监控端信息，并上传监控信息到服务端
+* cat-client.jar：客户端组件，负责与服务端进行连接通信，
+* cat-core.jar：核心处理组件，负责具体的与客户端通信服务，解析数据、输出报告
+* cat-consumer.jar：消费处理组件，负责实际的监控数据分析，处理工作
+* cat-hadoop.jar：HDFS 存储组件
+* broker-service.war：监控服务代理组件
 
 ## 配置文件清单说明
 

@@ -37,7 +37,6 @@ public class CatConstants {
 	/**
 	 * Pigeon Event Type, it is used to record the param
 	 */
-
 	public static final String TYPE_PIGEON_REQUEST = "PigeonRequest";
 
 	public static final String TYPE_PIGEON_RESPONSE = "PigeonRespone";
